@@ -14,9 +14,12 @@ builder.Services.AddDbContext<CommandContext>(opt =>
 
 builder.Services.AddControllers();
 
+// add automapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // dependecy injection
 builder.Services.AddScoped<ICommandAPIRepo, SqlCommandAPIRepo>();
 // builder.Services.AddScoped<ICommandAPIRepo, MockCommandAPIRepo>();
+
 
 var app = builder.Build();
 
