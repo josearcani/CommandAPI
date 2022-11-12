@@ -26,7 +26,7 @@ public class CommandsController : ControllerBase
         return Ok(_mapper.Map<IEnumerable<CommandReadDto>>(commandItems));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name="GetCommandById")]
     public ActionResult<CommandReadDto> GetCommandById(int id)
     {
         var commandItem = _repository.GetCommandById(id);
@@ -37,5 +37,18 @@ public class CommandsController : ControllerBase
         }
 
         return Ok(_mapper.Map<CommandReadDto>(commandItem));
+    }
+
+    [HttpPost]
+    public ActionResult<CommandReadDto> CreateCommand(CommandCreateDto commandCreateDto)
+    {
+        var newCommand = _mapper.Map<Command>(commandCreateDto);
+        _repository.CreateCommand(newCommand);
+        _repository.SaveChanges();
+        
+        var commandReadDto = _mapper.Map<CommandReadDto>(newCommand);
+        return CreatedAtRoute(nameof(GetCommandById),
+            new { Id = commandReadDto.Id },
+            commandReadDto);
     }
 }

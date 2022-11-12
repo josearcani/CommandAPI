@@ -9,9 +9,15 @@ public class SqlCommandAPIRepo : ICommandAPIRepo
     {
         _context = context;
     }
+
     public void CreateCommand(Command cmd)
     {
-        throw new NotImplementedException();
+        if (cmd is null)
+        {
+            throw new ArgumentException(nameof(cmd));
+        }
+        _context.CommandItems.Add(cmd);
+        this.SaveChanges();
     }
 
     public void DeleteCommand(Command cmd)
@@ -31,7 +37,7 @@ public class SqlCommandAPIRepo : ICommandAPIRepo
 
     public bool SaveChanges()
     {
-        throw new NotImplementedException();
+        return (_context.SaveChanges() >= 0);
     }
 
     public void UpdateCommand(Command cmd)
