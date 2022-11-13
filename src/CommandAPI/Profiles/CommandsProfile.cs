@@ -11,5 +11,6 @@ public class CommandsProfile : Profile
         // source > target
         CreateMap<Command, CommandReadDto>();
         CreateMap<CommandCreateDto, Command>();
+        CreateMap<CommandUpdateDto, Command>();
     }
 }

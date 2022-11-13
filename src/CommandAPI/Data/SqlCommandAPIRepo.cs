@@ -42,6 +42,6 @@ public class SqlCommandAPIRepo : ICommandAPIRepo
 
     public void UpdateCommand(Command cmd)
     {
-        throw new NotImplementedException();
+        // not necessary to implement, the mapper takes care of it
     }
 }

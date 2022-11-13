@@ -51,4 +51,23 @@ public class CommandsController : ControllerBase
             new { Id = commandReadDto.Id },
             commandReadDto);
     }
+
+    [HttpPut("{id}")]
+    public ActionResult UpdateCommand(int id, CommandUpdateDto commandUpdateDto)
+    {
+        // verify id exist
+        var commandFromRepo = _repository.GetCommandById(id);
+        // 404 if not found
+        if (commandFromRepo is null)
+        {
+            return NotFound();
+        }
+        // update command - map dto to command
+        _mapper.Map(commandUpdateDto,commandFromRepo);
+        // update nothing
+        _repository.UpdateCommand(commandFromRepo);
+        _repository.SaveChanges();
+        // 204 code
+        return NoContent();
+    }
 }
