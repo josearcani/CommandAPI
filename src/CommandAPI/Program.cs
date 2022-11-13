@@ -1,5 +1,6 @@
 using CommandAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,11 @@ stringBuilder.Password = builder.Configuration["Password"];
 builder.Services.AddDbContext<CommandContext>(opt =>
     opt.UseNpgsql(stringBuilder.ConnectionString));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(s =>
+{
+    // add support to patch operation
+    s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+});;
 
 // add automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

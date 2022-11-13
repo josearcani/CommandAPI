@@ -2,6 +2,7 @@ using AutoMapper;
 using CommandAPI.Data;
 using CommandAPI.Dtos;
 using CommandAPI.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommandAPI.Controllers;
@@ -68,6 +69,30 @@ public class CommandsController : ControllerBase
         _repository.UpdateCommand(commandFromRepo);
         _repository.SaveChanges();
         // 204 code
+        return NoContent();
+    }
+
+    [HttpPatch("{id}")]
+    public ActionResult PartialCommandUpdate(int id, JsonPatchDocument<CommandUpdateDto> patchDoc)
+    {
+        var commandFromRepo = _repository.GetCommandById(id);
+        if (commandFromRepo is null)
+        {
+            return NotFound();
+        }
+
+        // create placeholder based on command
+        var commandToPatch = _mapper.Map<CommandUpdateDto>(commandFromRepo);
+        // apply the patch document
+        patchDoc.ApplyTo(commandToPatch, ModelState);
+        // validate model changes, i.e. model validation Data Annotations
+        if (!TryValidateModel(commandToPatch))
+        {
+            return ValidationProblem(ModelState);
+        }
+        _mapper.Map(commandToPatch, commandFromRepo);
+        _repository.UpdateCommand(commandFromRepo);
+        _repository.SaveChanges();
         return NoContent();
     }
 }
