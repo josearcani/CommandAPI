@@ -110,4 +110,41 @@ public class CommandsControllerTests : IDisposable
         // Assert
         Assert.IsType<ActionResult<IEnumerable<CommandReadDto>>>(result);
     }
+
+    [Fact]
+    public void GetCommandByID_Returns404NotFound_WhenNonExistentIDProvided()
+    {
+        // Arrange
+        mockRepo!.Setup(repo => repo.GetCommandById(0)).Returns(() => null);
+
+        var controller = new CommandsController(mockRepo.Object, mapper!);
+
+        // Act
+        var result = controller.GetCommandById(1);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public void GetCommandByID_Returns200Ok_WhenValidIDProvided()
+    {
+        // Arrange
+        mockRepo!.Setup(repo => repo.GetCommandById(1)).Returns(new Command {
+            Id = 1,
+            HowTo = "mock",
+            CommandLine = "mock",
+            Platform = "mock"
+        });
+
+        var controller = new CommandsController(mockRepo.Object, mapper!);
+
+        // Act
+        var result = controller.GetCommandById(1);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<ActionResult<CommandReadDto>>(result);
+        // very usefull
+    }
 }
