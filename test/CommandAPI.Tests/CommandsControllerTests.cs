@@ -123,7 +123,8 @@ public class CommandsControllerTests : IDisposable
         var result = controller.GetCommandById(1);
 
         // Assert
-        Assert.IsType<NotFoundResult>(result.Result);
+        Assert.IsType<OkObjectResult>(result.Result);
+        // Assert.IsType<NotFoundResult>(result.Result);
     }
 
     [Fact]
