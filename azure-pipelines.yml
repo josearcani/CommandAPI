@@ -3,6 +3,7 @@ trigger:
 - main
 
 pool:
+  name: DemoPool
   vmImage: 'ubuntu-latest'
 
 variables:
