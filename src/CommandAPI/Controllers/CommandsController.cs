@@ -56,7 +56,6 @@ public class CommandsController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult UpdateCommand(int id, CommandUpdateDto commandUpdateDto)
     {
-        // verify id exist
         var commandFromRepo = _repository.GetCommandById(id);
         // 404 if not found
         if (commandFromRepo is null)
