@@ -1,15 +1,21 @@
-
 trigger:
-- main
+  - main
 
 pool:
   name: DemoPool
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration: "Release"
 
 steps:
-- task: UseDotNet@2
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+  - task: UseDotNet@2
+  - script: dotnet build --configuration $(buildConfiguration)
+    displayName: "dotnet build $(buildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet test"
+    inputs:
+      command: test
+      projects: "**/Tests/*.csproj"
+      testRunTitle: "xUNIT Test run"
