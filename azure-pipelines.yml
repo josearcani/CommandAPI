@@ -19,3 +19,13 @@ steps:
       command: test
       projects: "**/*Tests/*.csproj"
       testRunTitle: "xUNIT Test run"
+
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet publish"
+    inputs:
+      command: publish
+      projects: "src/CommandAPI/*.csproj"
+      arguments: "--configuration $(builConfiguration) --output $(Build.ArtifactStagingDirectory)"
+
+  - task: PublishBuildArtifacts@1
+    displayName: "publish artifacts"
