@@ -28,6 +28,12 @@ builder.Services.AddScoped<ICommandAPIRepo, SqlCommandAPIRepo>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CommandContext>();
+    db.Database.Migrate();
+}
+
 app.MapControllers();
 
 app.Run();
